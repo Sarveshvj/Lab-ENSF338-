@@ -1,30 +1,38 @@
+import json
 import timeit
-import random
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
+import numpy as np
 
-# Linear search function
-def linear_search(arr, target):
-    for x in arr:
-        if x == target:
-            return True
-    return False
+plt.rcParams['figure.figsize'] = [10, 5]
 
-# Setup data
-n = 1000
-data = list(range(n))
-target = random.choice(data)
 
-def test_func():
-    linear_search(data, target)
+with open("large-file.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
 
-# Time using timeit.repeat
-times = timeit.repeat(stmt=test_func, repeat=1000, number=1)
 
-# Plot histogram
+subset = data[:1000]
+
+
+def change_size():
+    for record in subset:
+        record["size"] = 42
+
+
+timer = timeit.Timer(change_size)
+results = timer.repeat(repeat=1000, number=1)
+
+average = sum(results) / len(results)
+print("Average time for 1000 records:", average)
+
+
 plt.figure()
-plt.hist(times)
+plt.hist(results, bins=30)
+
 plt.xlabel("Processing Time (seconds)")
 plt.ylabel("Frequency")
-plt.title("Histogram of Linear Search Times (1000 Records)")
+plt.title("Distribution of Processing Time for 1000 Records")
+
 plt.savefig("output.3.3.png")
-plt.show()
+plt.close()
+
+print("Histogram saved as output.3.3.png")

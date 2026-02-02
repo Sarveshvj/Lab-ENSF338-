@@ -1,47 +1,50 @@
-import time
-import random
+import json
+import timeit
+from matplotlib import pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
 
-# Linear search function
-def linear_search(arr, target):
-    for x in arr:
-        if x == target:
-            return True
-    return False
+plt.rcParams['figure.figsize'] = [10, 5]
 
+
+with open("large-file.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+
+avgtimes = []
 sizes = [1000, 2000, 5000, 10000]
-averages = []
 
-# Benchmarking
-for n in sizes:
-    times = []
-    data = list(range(n))
+for size in sizes:
+    subset = data[:size]
+    rez = []
 
-    for _ in range(100):
-        target = random.choice(data)
-        start = time.perf_counter()
-        linear_search(data, target)
-        end = time.perf_counter()
-        times.append(end - start)
+    def change_size():
+        for record in subset:
+            record["size"] = 42
 
-    avg_time = sum(times) / len(times)
-    averages.append(avg_time)
+    for i in range(100):
+        tm = timeit.timeit(change_size, number=1)
+        rez.append(tm)
 
-# Linear regression
-coeffs = np.polyfit(sizes, averages, 1)
-poly = np.poly1d(coeffs)
+    avg = sum(rez) / len(rez)
+    avgtimes.append(avg)
 
-x_line = np.linspace(min(sizes), max(sizes), 100)
-y_line = poly(x_line)
+    print("Average time for %d records: %f" % (size, avg))
 
-# Plot
-plt.figure()
-plt.plot(sizes, averages, marker='o', label="Average Time")
-plt.plot(x_line, y_line, label="Regression Line")
+
+# ----- Linear Regression -----
+slope, intercept = np.polyfit(sizes, avgtimes, 1)
+
+plt.scatter(sizes, avgtimes)
+linevalues = [slope * x + intercept for x in sizes]
+plt.plot(sizes, linevalues)
+
 plt.xlabel("Number of Records")
 plt.ylabel("Average Processing Time (seconds)")
-plt.title("Linear Search Performance")
-plt.legend()
+plt.title("Processing Time vs Number of Records")
+
 plt.savefig("output.3.2.png")
-plt.show()
+plt.close()
+
+
+print("The linear model is: t = %.2e * n + %.2e" % (slope, intercept))
+print("Plot saved as output.3.2.png")
