@@ -4,16 +4,16 @@ import pandas as pd
 import numpy as np
 
 def load_data():
-    data = pd.read_json('internetdata.json')
+    data = pd.read_json("internetdata.json")
     return data
 
 def create_dataframe(data):
-    col = ["country", "incomeperperson"]
+    col = ["country", "incomeperperson", "internetuserate"]
     df = pd.DataFrame(data, columns=col)
     return df
 
 def split_data(data):
-    data = data.dropna(subset=["incomeperperson"])  
+    data = data.dropna(subset=["incomeperperson", "internetuserate"])  
     group1 = data[data["incomeperperson"] < 10000]
     group2 = data[data["incomeperperson"] >= 10000]
 
@@ -39,7 +39,8 @@ def plot_histograms(group1, group2):
 
 def main():
     data = load_data()
-    group1, group2 = split_data(data)
+    df = create_dataframe(data)
+    group1, group2 = split_data(df)
     plot_histograms(group1, group2)
 
 main()
