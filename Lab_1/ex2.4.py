@@ -28,8 +28,6 @@ def compute_average():
 def main():
     read_into_list()
     count()
-    average_vowels = compute_average()
-    print(average_vowels)
     average_time = ( timeit.timeit(compute_average, number = 100) / 100 )
     print(average_time)
 
