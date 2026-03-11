@@ -70,11 +70,10 @@ def experiment(input_size, measurements):
     merge_list = []
 
     for i in range(measurements):
-        arr1 = [random.randint(1, 1000) for n in range(input_size)]
-        bubble_time = timeit.timeit(lambda: bubbleSort(arr1), number = 1) * 1000 # in ms
+        arr = [random.randint(1, 1000) for n in range(input_size)]
+        bubble_time = timeit.timeit(lambda: bubbleSort(arr.copy()), number = 1) * 1000 # in ms
         bubble_list.append(bubble_time)
-        arr2 = [random.randint(1, 1000) for n in range(input_size)]
-        merge_time = timeit.timeit(lambda: mergeSort(arr2), number = 1) * 1000 # in ms
+        merge_time = timeit.timeit(lambda: mergeSort(arr.copy()), number = 1) * 1000 # in ms
         merge_list.append(merge_time)
         
     return bubble_list, merge_list, input_size
