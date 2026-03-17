@@ -25,16 +25,11 @@ def evaluate(expression):
     for token in tokens:
 
         if token == ')':
-            args = []
-
-            while stack.peek() != '(':
-                args.append(stack.pop())
-
-            stack.pop()
-
-            e2 = args[0]
-            e1 = args[1]
-            operator = args[2]
+            # Pop until '('
+            e2 = stack.pop()
+            e1 = stack.pop()
+            operator = stack.pop()
+            stack.pop()  # remove '('
 
             if operator == '+':
                 result = e1 + e2
@@ -44,6 +39,8 @@ def evaluate(expression):
                 result = e1 * e2
             elif operator == '/':
                 result = e1 // e2
+            else:
+                raise ValueError("Unknown operator")
 
             stack.push(result)
 
@@ -51,6 +48,7 @@ def evaluate(expression):
             stack.push(token)
 
         else:
+            # number or operator
             try:
                 stack.push(int(token))
             except ValueError:
