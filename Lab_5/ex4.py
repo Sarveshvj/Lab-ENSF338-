@@ -2,7 +2,7 @@ import random
 import timeit
 import matplotlib.pyplot as plt
 
-class Queue:
+class ArrayQueue:
     def __init__(self):
         self.queue = []
     
