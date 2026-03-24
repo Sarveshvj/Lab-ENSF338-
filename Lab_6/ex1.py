@@ -65,7 +65,7 @@ def insert_vector(vector, root):
         i += 1
     return root
 
-def experiment_1():
+def sorted_experiment():
     sorted_vector = build_vector(10000)
     root = None
     root = insert_vector(sorted_vector, root)
@@ -84,7 +84,7 @@ def experiment_1():
 
 # 3.
 
-def experiment_2():
+def shuffled_experiment():
     sorted_vector = build_vector(10000)
     shuffled_vector = shuffle_vector(sorted_vector)
     root = None
@@ -107,17 +107,18 @@ def experiment_2():
 
 # running experiments
 
-average_time_1, total_time_1 = experiment_1()
-average_time_2, total_time_2 = experiment_2()
+average_time_1, total_time_1 = sorted_experiment()
+average_time_2, total_time_2 = shuffled_experiment()
 
 print(f"Average time 1: {average_time_1}")
-print(f"Total time 1: {total_time_1}")
+print(f"Total time 1: {total_time_1}\n")
 print(f"Average time 2: {average_time_2}")
-print(f"Total time 2: {total_time_2}")
+print(f"Total time 2: {total_time_2}\n")
 
 '''
-Experiment 2 using a shuffled vector to build a tree by insertion is about 257 times faster by total time
-compared to Experiment 1 which used the same vector but sorted, the shuffled vector also has a much faster
+4. 
+on a run, shuffled_experiment() using a shuffled vector to build a tree by insertion measured about 257 times faster by total time
+compared to sorted_experiment() which used the same vector but sorted, the shuffled vector also has a much faster
 average time than the sorted vector.
 The sorted vector produces a degenerate tree with every new element on the same side, while the shuffled
 vector produces a balanced tree because of the varying input numbers, avoiding the worst case (degenerate tree)
