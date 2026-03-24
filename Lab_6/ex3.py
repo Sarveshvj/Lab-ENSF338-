@@ -6,8 +6,6 @@ class Node:
         self.left = None
         self.right = None
 
-OPERATORS = {'+', '-', '*', '/'}
-
 def parse(tokens, index):
     token = tokens[index]
 
@@ -46,3 +44,25 @@ def evaluate(node):
         return left_val * right_val
     elif node.value == '/':
         return left_val / right_val
+        
+    
+if __name__ == "__main__":
+    expression = sys.argv[1]
+    expression = expression.replace("(", " ( ").replace(")", " ) ")
+
+    tokens = expression.split()
+
+    if len(tokens) == 1:
+        print(int(tokens[0]))
+        sys.exit(0)
+
+    if tokens[0] != "(":
+        tokens = ["("] + tokens + [")"]
+        
+    root, _ = parse(tokens, 0)
+    result = evaluate(root)
+
+    if isinstance(result, float) and result.is_integer():
+        print(int(result))
+    else:
+        print(result)
