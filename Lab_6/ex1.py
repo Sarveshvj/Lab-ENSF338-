@@ -1,6 +1,8 @@
 import timeit
 import random
 
+# 1.
+
 class Node:
     def __init__(self, data, parent=None, left=None, right=None):
         self.data = data
@@ -25,6 +27,8 @@ def insert(data, root=None):
         parent.left = Node(data, parent)
     else:
         parent.right = Node(data, parent)
+    
+    return root
 
 def search(data, root):
     # efficient performed on "well-balanced" tree: O(logn)
@@ -39,6 +43,8 @@ def search(data, root):
             current = current.right
     return None
 
+# 2
+
 def build_vector(elements):
     i = 1
     sorted_vector = []
@@ -48,7 +54,8 @@ def build_vector(elements):
     return sorted_vector
 
 def shuffle_vector(vector):
-    shuffled_vector = random.shuffle(vector)
+    shuffled_vector = vector.copy()
+    random.shuffle(shuffled_vector)
     return shuffled_vector
 
 def insert_vector(vector, root):
@@ -57,9 +64,62 @@ def insert_vector(vector, root):
         root = insert(vector[i], root)
         i += 1
     return root
+
+def experiment_1():
+    sorted_vector = build_vector(10000)
+    root = None
+    root = insert_vector(sorted_vector, root)
+    total_time = 0
+
+    for el in sorted_vector:
+        def search_wrapper():
+            return search(el, root)
+        time = timeit.timeit(search_wrapper, number=10)
+        total_time += time
+
+    total_searches = len(sorted_vector) * 10
+    average_time = total_time / total_searches
+
+    return average_time, total_time
+
+# 3.
+
+def experiment_2():
+    sorted_vector = build_vector(10000)
+    shuffled_vector = shuffle_vector(sorted_vector)
+    root = None
+    root = insert_vector(shuffled_vector, root)
+
+    total_time = 0
+    
+    for el in sorted_vector:
+        def search_wrapper():
+            return search(el, root)
         
-# **TEMP TESTING 
-sorted_vector = build_vector(10)
-print(sorted_vector)
-shuffled_vector = shuffle_vector(sorted_vector.copy())
-print(shuffled_vector)      # RETURNING NONE ?
+        time = timeit.timeit(search_wrapper, number=10)
+        total_time += time
+
+    total_searches = len(sorted_vector) * 10
+    average_time = total_time / total_searches
+
+    return average_time, total_time
+
+
+# running experiments
+
+average_time_1, total_time_1 = experiment_1()
+average_time_2, total_time_2 = experiment_2()
+
+print(f"Average time 1: {average_time_1}")
+print(f"Total time 1: {total_time_1}")
+print(f"Average time 2: {average_time_2}")
+print(f"Total time 2: {total_time_2}")
+
+'''
+Experiment 2 using a shuffled vector to build a tree by insertion is about 257 times faster by total time
+compared to Experiment 1 which used the same vector but sorted, the shuffled vector also has a much faster
+average time than the sorted vector.
+The sorted vector produces a degenerate tree with every new element on the same side, while the shuffled
+vector produces a balanced tree because of the varying input numbers, avoiding the worst case (degenerate tree)
+and involving much less levels.
+'''
