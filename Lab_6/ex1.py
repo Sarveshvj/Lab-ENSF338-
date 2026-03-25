@@ -118,7 +118,7 @@ print(f"Total time 2: {total_time_2}\n")
 '''
 4. 
 on a run, shuffled_experiment() using a shuffled vector to build a tree by insertion measured about 257 times faster by total time
-compared to sorted_experiment() which used the same vector but sorted, the shuffled vector also has a much faster
+to search compared to sorted_experiment() which used the same vector but sorted, the shuffled vector also has a much faster
 average time than the sorted vector.
 The sorted vector produces a degenerate tree with every new element on the same side, while the shuffled
 vector produces a balanced tree because of the varying input numbers, avoiding the worst case (degenerate tree)
