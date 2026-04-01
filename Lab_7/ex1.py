@@ -1,3 +1,6 @@
+import random
+import timeit
+
 # Binary search tree with insertion and search operations
 
 class Node:
@@ -39,3 +42,49 @@ def search(data, root):
         else:
             current = current.right
     return None
+
+# 2
+
+def inorder(root):
+    if root is not None:
+        inorder(root.left)
+        print(root.data)
+        inorder(root.right)
+
+def height(node):
+    if node is None:
+        return -1
+    
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    return max(left_height, right_height) + 1
+
+def isBalanced(node):
+    if node is None:
+        return True
+        
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    balance = left_height - right_height
+
+    if abs(balance) > 1:
+        return False
+    
+    return isBalanced(node.left) and isBalanced(node.right)
+
+def generate_thousand_tasks():
+    # make list of 1000 integers
+    int_list = list(range(1000))
+
+    # make list of 1000 tasks (1000 shuffled lists)
+    task_list = []
+    for i in range(1000):
+        task = int_list.copy()
+        random.shuffle(task)
+        task_list.append(task)
+
+    return task_list
+
+
